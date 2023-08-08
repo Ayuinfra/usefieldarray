@@ -41,9 +41,10 @@ const RuleInputField: React.FC<{
       label={label}
       variant="outlined"
       fullWidth
-      disabled={disabled}
+      disabled={disabled} 
     />
     {fieldState?.invalid && <FieldError error={fieldState.error?.message} />}
+    
   </>
 );
 
@@ -98,11 +99,11 @@ const RuleInputs: React.FC<RuleInputsProps> = ({
               rules={{ required: 'Description is required' }}
               render={({ field, fieldState }) => (
                 <RuleInputField
-                field={field}
-                fieldState={fieldState}
-                label="Description"
-                disabled={field.value === 'non-admin'}
-              />
+                  field={field}
+                  fieldState={fieldState}
+                  label="Description"
+                  disabled={field.value === 'non-admin'}
+                />
               )}
             />
           </Grid>
