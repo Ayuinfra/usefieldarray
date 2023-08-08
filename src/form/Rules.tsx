@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Grid,
   IconButton,
@@ -41,10 +41,11 @@ const RuleInputField: React.FC<{
       label={label}
       variant="outlined"
       fullWidth
-      disabled={disabled} 
+      disabled={disabled}
     />
-    {fieldState?.invalid && <FieldError error={fieldState.error?.message} />}
-    
+    {!disabled && fieldState?.invalid && (
+      <FieldError error={fieldState.error?.message} />
+    )}
   </>
 );
 
@@ -55,27 +56,45 @@ const RuleInputs: React.FC<RuleInputsProps> = ({
   commonErrorMessage,
   userType,
 }) => {
+  const [disabledFields, setDisabledFields] = useState<boolean[]>(
+    fields.map((field) => field.isAdmin)
+  );
+
+  const handleAdminChange = (index: number, value: string) => {
+    const updatedDisabledFields = [...disabledFields];
+    updatedDisabledFields[index] = value === 'non-admin';
+    setDisabledFields(updatedDisabledFields);
+  };
+  
+
   return (
     <Grid item xs={12}>
       <Typography variant="h6" gutterBottom>
         Rules
       </Typography>
       {fields.map((field, index) => (
-        <Grid container spacing={1} key={field.id}>
-          <Grid item xs={2}>
+        <Grid container key={field.id}>
+          <Grid item xs={3}>
             <Controller
               name={`rules.${index}.isAdmin`}
               control={control}
               defaultValue={field.isAdmin}
               render={({ field }) => (
-                <Select {...field} variant="outlined">
+                <Select
+                  {...field}
+                  variant="outlined"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleAdminChange(index, e.target.value);
+                  }}
+                >
                   <MenuItem value="admin">Admin</MenuItem>
                   <MenuItem value="non-admin">Non Admin</MenuItem>
                 </Select>
               )}
             />
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={3}>
             <Controller
               name={`rules.${index}.name`}
               control={control}
@@ -86,12 +105,12 @@ const RuleInputs: React.FC<RuleInputsProps> = ({
                   field={field}
                   fieldState={fieldState}
                   label="Name"
-                  disabled={field.value === 'non-admin'}
+                  disabled={disabledFields[index]}
                 />
               )}
             />
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={3}>
             <Controller
               name={`rules.${index}.description`}
               control={control}
@@ -102,7 +121,7 @@ const RuleInputs: React.FC<RuleInputsProps> = ({
                   field={field}
                   fieldState={fieldState}
                   label="Description"
-                  disabled={field.value === 'non-admin'}
+                  disabled={disabledFields[index]}
                 />
               )}
             />
