@@ -1,53 +1,92 @@
 import React from 'react';
-import { Grid, IconButton, Typography, TextField } from '@mui/material';
-import { Controller } from 'react-hook-form';
+import {
+  Grid,
+  IconButton,
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+} from '@mui/material';
+import { Controller, Control } from 'react-hook-form';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-interface Rule {
-  name: string;
-  description: string;
-}
-
 interface RuleInputsProps {
-  fields: Rule[];
+  fields: {
+    id: string;
+    name: string;
+    description: string;
+    isAdmin: boolean;
+  }[];
   remove: (index: number) => void;
-  control: any;
-  commonErrorMessage: string; 
+  control: Control<any>;
+  commonErrorMessage: string;
+  userType: 'admin' | 'non-admin';
 }
 
 const FieldError: React.FC<{ error?: string }> = ({ error }) => (
-    <Typography variant="body2" color="error">
-      {error || ''}
-    </Typography>
-  );
-  
+  <Typography variant="body2" color="error">
+    {error || ''}
+  </Typography>
+);
 
-const RuleInputs: React.FC<RuleInputsProps> = ({ fields, remove, control, commonErrorMessage }) => {
+const RuleInputField: React.FC<{
+  field: any;
+  fieldState: any;
+  label: string;
+  disabled: boolean;
+}> = ({ field, fieldState, label, disabled }) => (
+  <>
+    <TextField
+      {...field}
+      label={label}
+      variant="outlined"
+      fullWidth
+      disabled={disabled}
+    />
+    {fieldState?.invalid && <FieldError error={fieldState.error?.message} />}
+  </>
+);
+
+const RuleInputs: React.FC<RuleInputsProps> = ({
+  fields,
+  remove,
+  control,
+  commonErrorMessage,
+  userType,
+}) => {
   return (
     <Grid item xs={12}>
       <Typography variant="h6" gutterBottom>
         Rules
       </Typography>
       {fields.map((field, index) => (
-        <Grid container spacing={1} key={index}>
+        <Grid container spacing={1} key={field.id}>
+          <Grid item xs={2}>
+            <Controller
+              name={`rules.${index}.isAdmin`}
+              control={control}
+              defaultValue={field.isAdmin}
+              render={({ field }) => (
+                <Select {...field} variant="outlined">
+                  <MenuItem value="admin">Admin</MenuItem>
+                  <MenuItem value="non-admin">Non Admin</MenuItem>
+                </Select>
+              )}
+            />
+          </Grid>
           <Grid item xs={5}>
             <Controller
               name={`rules.${index}.name`}
               control={control}
               defaultValue={field.name}
-              rules={{ required: 'Name is required' }} 
+              rules={{ required: 'Name is required' }}
               render={({ field, fieldState }) => (
-                <>
-                  <TextField
-                    {...field}
-                    label="Name"
-                    variant="outlined"
-                    fullWidth
-                  />
-                  {fieldState?.invalid && (
-                    <FieldError error={fieldState.error?.message} />
-                  )}
-                </>
+                <RuleInputField
+                  field={field}
+                  fieldState={fieldState}
+                  label="Name"
+                  disabled={field.value === 'non-admin'}
+                />
               )}
             />
           </Grid>
@@ -56,19 +95,14 @@ const RuleInputs: React.FC<RuleInputsProps> = ({ fields, remove, control, common
               name={`rules.${index}.description`}
               control={control}
               defaultValue={field.description}
-              rules={{ required: 'Description is required' }} 
+              rules={{ required: 'Description is required' }}
               render={({ field, fieldState }) => (
-                <>
-                  <TextField
-                    {...field}
-                    label="Description"
-                    variant="outlined"
-                    fullWidth
-                  />
-                  {fieldState?.invalid && (
-                    <FieldError error={fieldState.error?.message} />
-                  )}
-                </>
+                <RuleInputField
+                field={field}
+                fieldState={fieldState}
+                label="Description"
+                disabled={field.value === 'non-admin'}
+              />
               )}
             />
           </Grid>
@@ -79,7 +113,9 @@ const RuleInputs: React.FC<RuleInputsProps> = ({ fields, remove, control, common
           </Grid>
         </Grid>
       ))}
-      {fields.length === 0 && <Typography color="error">{commonErrorMessage}</Typography>}
+      {fields.length === 0 && (
+        <Typography color="error">{commonErrorMessage}</Typography>
+      )}
     </Grid>
   );
 };
