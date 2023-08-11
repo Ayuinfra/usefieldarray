@@ -1,19 +1,50 @@
- import React from 'react';
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
-import MyForm from './form/MyForm';
-
-const theme = createTheme();
+import React, { useState } from 'react';
+import { Button } from '@mui/material';
+import DynamicDialog from './dialogbox/DynamicDialog';
+import PrimaryButton from './dialogbox/Button';
 
 function App() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const handleSave = (data: string) => {
+    console.log("Data:", data);
+  };
+
+  const openDialogButton = (
+    <Button variant="contained" color="primary" onClick={handleOpenDialog}>
+      Open Dialog
+    </Button>
+  );
+
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <div className="App">
-        <header className="App-header">
-          <MyForm />
-        </header>
-      </div>
-    </ThemeProvider>
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <h1>Dynamic Dialog Example</h1>
+      {openDialogButton}
+      <DynamicDialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+        heading="Custom Heading"
+        openDialogButton={openDialogButton}
+        actionBtnTitle='Save'
+        closeBtnTitle='Cancel'
+        onSave={handleSave} // Pass the handleSave function as a prop
+      />
+
+      <PrimaryButton
+          title='Add'
+          onClick={()=>handleSave("data")}
+      />
+    </div>
+
+
   );
 }
 
