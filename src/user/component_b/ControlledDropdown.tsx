@@ -1,7 +1,7 @@
+// ControlledDropdown.tsx
 import React from 'react';
-import { Controller, Control, useForm } from 'react-hook-form';
+import { Controller, Control } from 'react-hook-form';
 import { FormControl, FormLabel, Select, MenuItem, FormHelperText } from '@mui/material';
-
 interface FormValues {
     name: string;
     description: string;
@@ -10,18 +10,19 @@ interface FormValues {
     languages: string[];
 }
 
+
 interface ControlledSelectProps {
     control: Control<FormValues>;
     name: keyof FormValues;
     label: string;
     rules?: Record<string, any>;
+    error?: boolean;
+    errorMessage?: string;
 }
 
-const ControlledDropdown: React.FC<ControlledSelectProps> = ({ control, name, label, rules }) => {
-    const { formState: { errors } } = useForm<FormValues>();
-
+const ControlledDropdown: React.FC<ControlledSelectProps> = ({ control, name, label, rules, error, errorMessage }) => {
     return (
-        <FormControl fullWidth variant="outlined" margin="normal" error={!!rules?.required && !!errors?.[name]}>
+        <FormControl fullWidth variant="outlined" margin="normal" error={error}>
             <FormLabel component="legend">{label}</FormLabel>
             <Controller
                 name={name}
@@ -34,7 +35,7 @@ const ControlledDropdown: React.FC<ControlledSelectProps> = ({ control, name, la
                     </Select>
                 )}
             />
-            {errors?.[name] && <FormHelperText>{errors[name]?.message}</FormHelperText>}
+            {error && <FormHelperText>{errorMessage}</FormHelperText>}
         </FormControl>
     );
 };

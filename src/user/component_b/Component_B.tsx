@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm, UseFormReturn } from 'react-hook-form';
 import { Button } from '@mui/material';
 import ControlledTextField from './ControlledTextField';
-import ControlledDropdown from './ControlledDropdown';
+import ControlledDropdown from './ControlledDropdown'; // Update the import based on your file structure
 import ControlledRadioGroup from './ControlledRadioGroup';
 import ControlledCheckboxGroup from './ControlledCheckBoxGroup';
 
@@ -22,8 +22,7 @@ const ComponentB: React.FC<ComponentBProps> = ({ onSubmit }) => {
   const {
     handleSubmit,
     control,
-    // eslint-disable-next-line no-empty-pattern
-    formState: { },
+    formState: { errors },
   }: UseFormReturn<FormValues> = useForm<FormValues>();
 
   return (
@@ -45,6 +44,8 @@ const ComponentB: React.FC<ComponentBProps> = ({ onSubmit }) => {
         name="role"
         label="Role"
         rules={{ required: 'Role is required' }}
+        error={!!errors.role}
+        errorMessage={errors.role?.message}
       />
 
       <ControlledRadioGroup
@@ -69,7 +70,6 @@ const ComponentB: React.FC<ComponentBProps> = ({ onSubmit }) => {
           },
         }}
       />
-
 
       <Button type="submit" variant="contained" color="primary">
         Submit
