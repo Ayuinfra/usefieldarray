@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import DynamicDialog from './dialogbox/DynamicDialog';
-import PrimaryButton from './dialogbox/Button';
 
 function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -32,16 +31,16 @@ function App() {
         open={dialogOpen}
         onClose={handleCloseDialog}
         heading="Custom Heading"
-        openDialogButton={openDialogButton}
+       
         actionBtnTitle='Save'
         closeBtnTitle='Cancel'
         onSave={handleSave} // Pass the handleSave function as a prop
       />
 
-      <PrimaryButton
+      {/* <PrimaryButton
           title='Add'
           onClick={()=>handleSave("data")}
-      />
+      /> */}
     </div>
 
 

@@ -15,7 +15,6 @@ import PrimaryButton from './Button';
 interface DynamicDialogProps {
   open: boolean;
   heading: string;
-  openDialogButton: React.ReactNode;
   actionBtnTitle: string;
   closeBtnTitle?: string;
   onClose: () => void;
@@ -36,10 +35,6 @@ const DynamicDialog: React.FC<DynamicDialogProps> = ({
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => handleCommonClose(event, onClose),
     [onClose]
   );
-
-  const handleSave = () => {
-    onSave(componentData);
-  };
 
   return (
     <Dialog open={open} onClose={onClose} onClick={handleClose}>
@@ -64,7 +59,7 @@ const DynamicDialog: React.FC<DynamicDialogProps> = ({
       </DialogContent>
       <DialogActions>
         {closeBtnTitle && <PrimaryButton title={closeBtnTitle} onClick={onClose} />}
-        <PrimaryButton title={actionBtnTitle} onClick={handleSave} />
+        <PrimaryButton title={actionBtnTitle} onClick={()=>  onSave(componentData)} />
       </DialogActions>
     </Dialog>
   );
