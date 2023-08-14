@@ -50,10 +50,12 @@ const ComponentB: React.FC<ComponentBProps> = ({ onSubmit }) => {
 
       <ControlledRadioGroup
         control={control}
+        errors={errors}
         name="gender"
         options={['male', 'female', 'other']}
         label="Gender"
         rules={{ required: 'Gender is required' }}
+      
       />
 
       <ControlledCheckboxGroup

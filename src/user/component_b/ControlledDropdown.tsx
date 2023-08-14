@@ -29,7 +29,8 @@ const ControlledDropdown: React.FC<ControlledSelectProps> = ({ control, name, la
                 control={control}
                 rules={rules}
                 render={({ field }) => (
-                    <Select {...field} label={`Select ${label}`}>
+                    <Select defaultValue='0' {...field} label={`Select ${label}`}>
+                        <MenuItem value="0">please select</MenuItem>
                         <MenuItem value="admin">Admin</MenuItem>
                         <MenuItem value="subadmin">Sub Admin</MenuItem>
                     </Select>

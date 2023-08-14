@@ -1,5 +1,5 @@
 import React from 'react';
-import { Controller, Control, useForm } from 'react-hook-form';
+import { Controller, Control } from 'react-hook-form';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, FormHelperText } from '@mui/material';
 
 interface FormValues {
@@ -16,10 +16,12 @@ interface ControlledRadioGroupProps {
     options: string[];
     label: string;
     rules?: Record<string, any>;
+    errors? : any
 }
 
-const ControlledRadioGroup: React.FC<ControlledRadioGroupProps> = ({ control, name, options, label, rules }) => {
-    const { formState: { errors } } = useForm<FormValues>();
+const ControlledRadioGroup: React.FC<ControlledRadioGroupProps> = ({ control, name, options, label, rules,errors }) => {
+    console.log(errors)
+    //const { formState: { errors } } = useForm<FormValues>();
 
     return (
         <FormControl fullWidth margin="normal" error={!!errors?.[name]}>
@@ -30,6 +32,7 @@ const ControlledRadioGroup: React.FC<ControlledRadioGroupProps> = ({ control, na
                 rules={rules}
                 render={({ field }) => (
                     <RadioGroup
+                        {...field}
                         value={field.value}
                         onChange={field.onChange}
                     >
