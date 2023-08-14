@@ -15,7 +15,7 @@ import PrimaryButton from './Button';
 interface DynamicDialogProps {
   open: boolean;
   heading: string;
-  actionBtnTitle: string;
+  actionBtnTitle: string; 
   closeBtnTitle?: string;
   onClose: () => void;
   onSave: (data: any) => void; // onSave callback function
@@ -40,26 +40,26 @@ const DynamicDialog: React.FC<DynamicDialogProps> = ({
     <Dialog open={open} onClose={onClose} onClick={handleClose}>
       <DialogTitle>
         <Typography variant="h6">{heading}</Typography>
-        {closeBtnTitle &&  
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-          }}
-        >
-          <CloseIcon />
-        </IconButton>}
-       
+        {closeBtnTitle &&
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>}
+
       </DialogTitle>
       <DialogContent>
         <ComponentData value={componentData} onChange={setComponentData} />
       </DialogContent>
       <DialogActions>
         {closeBtnTitle && <PrimaryButton title={closeBtnTitle} onClick={onClose} />}
-        <PrimaryButton title={actionBtnTitle} onClick={()=>  onSave(componentData)} />
+        <PrimaryButton title={actionBtnTitle} onClick={() => onSave(componentData)} />
       </DialogActions>
     </Dialog>
   );
