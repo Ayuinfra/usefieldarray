@@ -61,14 +61,15 @@ const ComponentB: React.FC<ComponentBProps> = ({ onSubmit }) => {
         options={['hindi', 'english', 'other']}
         label="Languages"
         rules={{
-          validate: (value: string[]) => {
-            if (value.length === 0) {
+          validate: (value: string[] | undefined) => {
+            if (!value || value.length === 0) {
               return 'At least one language is required';
             }
             return undefined;
           },
         }}
       />
+
 
       <Button type="submit" variant="contained" color="primary">
         Submit
